@@ -23,7 +23,7 @@ void inc1() {
 	for(int i=0;i<1000;i++){
 		//lock_guard<mutex> m(m1);	//4. Always prefer scoped mutexes over raw mutexes
 		
-		//m1.lock();
+		//m1.lock();	//1. lock
 		//m1.lock();	//2. try to lock twice and you are deadlocked
 
 //		m2.lock();		//3. locking out of order (see dec1) m2 then m1, possible deadlock
@@ -32,10 +32,11 @@ void inc1() {
 
 		iGlobal++;
 		std::this_thread::sleep_for(std::chrono::microseconds(1));
+
 //		m2.unlock();	//3. unlock in order aquired
 //		m1.unlock();
 
-		//m1.unlock();	//forget to unlock and you are deadlocked
+		//m1.unlock();	//1. forget to unlock and you are deadlocked
 	}
 }
 
@@ -64,7 +65,7 @@ int main() {
 	t2.join();
 	t3.join();
 	t4.join();
-//	t4.join();		//1.  add an extra join and you crash
+//	t4.join();		//5.  add an extra join and you crash
 	
 	cout << "iGlobal=" <<iGlobal<< endl;
 }
